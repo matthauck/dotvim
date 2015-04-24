@@ -127,6 +127,15 @@ NeoBundle 'kien/ctrlp.vim'
 " left column buffer tags list
 NeoBundle 'vim-scripts/taglist.vim'
 
+" auto complete!
+
+if has('lua')
+  NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'} "{{{
+    let g:neocomplete#enable_at_startup=1
+    let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
+  " }}}
+endif
+
 " allows switching between cpp/h files
 NeoBundle 'derekwyatt/vim-fswitch'
 
@@ -143,6 +152,8 @@ NeoBundle 'matthauck/vimp4python'
 
 " plugin configuration {{{
 
+" ctrlp
+
 let g:ctrlp_match_window_reversed = 0
 let g:ctrlp_root_markers = ['.agignore', '.gitignore']
 let g:ctrlp_working_path_mode = 'ra'
@@ -154,6 +165,12 @@ let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
       \ --ignore .DS_Store
       \ --ignore "**/*.pyc"
       \ -g ""'
+
+" neo complete
+
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+
 " }}}
 
 
@@ -178,6 +195,11 @@ map <c-t> <c-]><cr>
 
 " opens sidebar of ctags for current buffer
 map <leader>l :Tlist<CR>
+
+" neocomplete
+
+" tab completion
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " }}}
 
