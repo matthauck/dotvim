@@ -196,8 +196,15 @@ map <c-t> <c-]><cr>
 " opens sidebar of ctags for current buffer
 map <leader>l :Tlist<CR>
 
-" neocomplete
+" p4
+map <leader>pe :P4Edit<CR>
+map <leader>pa :P4Add<CR>
+map <leader>pr :P4Revert<CR>
+map <leader>pd :P4Diff<CR>
+map <leader>pl :P4Filelog<CR>
+map <leader>pf :P4Fstat<CR>
 
+" neocomplete
 " tab completion
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
