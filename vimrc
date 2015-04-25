@@ -74,9 +74,9 @@ set wildmenu
 set smartcase
 set autoindent
 set expandtab
-set tabstop=2
-set tabstop=2
-set shiftwidth=2
+let &tabstop=s:settings.default_indent
+let &softtabstop=s:settings.default_indent
+let &shiftwidth=s:settings.default_indent
 set laststatus=2
 set showmatch
 set incsearch
