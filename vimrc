@@ -10,6 +10,7 @@
 
 " dotvim settings {{{
   let s:settings = {}
+  let s:settings.colorscheme = 'jellybeans'
   let s:settings.default_indent = 2
 
   " override defaults with the ones specified in g:dotvim_settings
@@ -147,6 +148,9 @@ NeoBundle 'rgarver/Kwbd.vim'
 
 " color schemes
 NeoBundle 'wesgibbs/vim-irblack'
+NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'tomasr/molokai'
+NeoBundle 'sjl/badwolf'
 
 " vcs plugins
 NeoBundle 'matthauck/vimp4python'
