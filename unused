@@ -1,0 +1,8 @@
+
+
+" left column buffer tags list
+NeoBundle 'vim-scripts/taglist.vim'
+
+" opens sidebar of ctags for current buffer
+map <leader>l :Tlist<CR>
+

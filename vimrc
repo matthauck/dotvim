@@ -124,15 +124,18 @@ endif
 " fuzzy file/tag searching
 NeoBundle 'kien/ctrlp.vim'
 
-" left column buffer tags list
-NeoBundle 'vim-scripts/taglist.vim'
+" commenting
+NeoBundle "scrooloose/nerdcommenter"
 
 " auto complete!
-
 if has('lua')
   NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'} "{{{
     let g:neocomplete#enable_at_startup=1
     let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+    " tab completion
+    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
   " }}}
 endif
 
@@ -166,10 +169,6 @@ let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
       \ --ignore "**/*.pyc"
       \ -g ""'
 
-" neo complete
-
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
 
 " }}}
 
@@ -184,17 +183,11 @@ noremap <leader>r :CtrlPTag<cr>
 " close buffer w/o closing window
 map <leader>bd <Plug>Kwbd
 
-" alt-o doesn't work right away on mac. set to nonsense mapping to not override real alt-o
-" http://stackoverflow.com/questions/7501092/can-i-map-alt-key-in-vim
-execute "set <M-0>=ø"
-nnoremap <M-0> :FSHere<cr>
-nnoremap <M-o> :FSHere<cr>
+" switch between header/cpp file
+nnoremap <c-h> :FSHere<cr>
 
 " re-map ctrl+t to jump to tag definition
 map <c-t> <c-]><cr>
-
-" opens sidebar of ctags for current buffer
-map <leader>l :Tlist<CR>
 
 " p4
 map <leader>pe :P4Edit<CR>
@@ -204,14 +197,16 @@ map <leader>pd :P4Diff<CR>
 map <leader>pl :P4Filelog<CR>
 map <leader>pf :P4Fstat<CR>
 
-" neocomplete
-" tab completion
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-
 " }}}
 
 
 " finish loading {{{
+  if exists('g:dotvim_settings.disabled_plugins')
+    for plugin in g:dotvim_settings.disabled_plugins
+      exec 'NeoBundleDisable '.plugin
+    endfor
+  endif
+
   call neobundle#end()
   filetype plugin indent on
   syntax enable
