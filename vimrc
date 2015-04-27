@@ -99,6 +99,7 @@ endif
     if exists('+undofile')
       set undofile
       let &undodir = s:get_cache_dir('undo')
+      call EnsureExists(&undodir)
     endif
 
     " backups
@@ -110,7 +111,6 @@ endif
     set noswapfile
 
     call EnsureExists(s:cache_dir)
-    call EnsureExists(&undodir)
     call EnsureExists(&backupdir)
     call EnsureExists(&directory)
   "}}}
