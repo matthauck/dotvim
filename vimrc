@@ -82,6 +82,8 @@ set laststatus=2
 set showmatch
 set incsearch
 set hlsearch
+" always write unix line endings
+set ffs=unix
 
 set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
