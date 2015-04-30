@@ -127,6 +127,9 @@ endif
 " fuzzy file/tag searching
 NeoBundle 'kien/ctrlp.vim'
 
+" searching
+NeoBundle "rking/ag.vim"
+
 " commenting
 NeoBundle "scrooloose/nerdcommenter"
 
