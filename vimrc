@@ -117,15 +117,32 @@ endif
     call EnsureExists(&directory)
   "}}}
 
-  let mapleader = ","
-  let g:mapleader = ","
 "}}}
 
 
 " plugins {{{
 
 " fuzzy file/tag searching
-NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'kien/ctrlp.vim' "{{{
+
+  noremap <leader>t :CtrlP<CR>
+  noremap <leader>r :CtrlPTag<cr>
+  noremap <leader>br :CtrlPBufTag<cr>
+
+  let g:ctrlp_match_window_reversed = 0
+  let g:ctrlp_root_markers = ['.agignore', '.gitignore']
+  let g:ctrlp_working_path_mode = 'ra'
+
+  if executable('ag')
+    let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+          \ --ignore .git
+          \ --ignore .svn
+          \ --ignore .hg
+          \ --ignore .DS_Store
+          \ --ignore "**/*.pyc"
+          \ -g ""'
+  endif
+"}}}
 
 " searching
 NeoBundle "rking/ag.vim"
@@ -154,10 +171,14 @@ if has('lua')
 endif
 
 " allows switching between cpp/h files
-NeoBundle 'derekwyatt/vim-fswitch'
+NeoBundle 'derekwyatt/vim-fswitch' "{{{
+  nnoremap <leader>h :FSHere<cr>
+"}}}
 
 " allows closing buffer w/o closing window!
-NeoBundle 'rgarver/Kwbd.vim'
+NeoBundle 'rgarver/Kwbd.vim' "{{{
+  map <leader>bd <Plug>Kwbd
+"}}}
 
 " color schemes
 NeoBundle 'wesgibbs/vim-irblack'
@@ -170,51 +191,16 @@ NeoBundle 'matthauck/vimp4python'
 " git
 NeoBundle "tpope/vim-fugitive"
 
-
-" }}}
-
-" plugin configuration {{{
-
-" ctrlp
-
-let g:ctrlp_match_window_reversed = 0
-let g:ctrlp_root_markers = ['.agignore', '.gitignore']
-let g:ctrlp_working_path_mode = 'ra'
-
-if executable('ag')
-  let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-        \ --ignore .git
-        \ --ignore .svn
-        \ --ignore .hg
-        \ --ignore .DS_Store
-        \ --ignore "**/*.pyc"
-        \ -g ""'
-endif
-
-
-" }}}
-
-
 " key mappings {{{
 
-" file fuzzy search
-noremap <leader>t :CtrlP<CR>
-" symbol fuzzy search
-noremap <leader>r :CtrlPTag<cr>
-
-" close buffer w/o closing window
-map <leader>bd <Plug>Kwbd
-
-" switch between header/cpp file
-nnoremap <c-h> :FSHere<cr>
-
-" re-map ctrl+t to jump to tag definition
-map <c-t> <c-]><cr>
-
+" re-map to jump to tag definition
+map <leader>g <c-]><cr>
 
  " formatting shortcuts
 nmap <leader>f$ :call StripTrailingWhitespace()<CR>
 vmap <leader>s :sort<cr>
+
+nnoremap <leader>w :w<cr>
 
 " p4
 map <leader>pe :P4Edit<CR>
