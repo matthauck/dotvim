@@ -83,6 +83,7 @@ set showmatch
 set incsearch
 set hlsearch
 set ffs=unix,dos
+set hidden
 
 " set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
