@@ -232,6 +232,9 @@ map <leader>pf :P4Fstat<CR>
 
 " }}}
 
+" autocmd "{{{
+  autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+"}}}
 
 " finish loading {{{
   if exists('g:dotvim_settings.disabled_plugins')
@@ -245,7 +248,7 @@ map <leader>pf :P4Fstat<CR>
   syntax enable
   if has_key(s:settings, 'colorscheme')
     exec 'colorscheme '.s:settings.colorscheme
-  endif 
+  endif
 
   NeoBundleCheck
 "}}}
