@@ -82,10 +82,9 @@ set laststatus=2
 set showmatch
 set incsearch
 set hlsearch
-" always write unix line endings
-set ffs=unix
+set ffs=unix,dos
 
-set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
+" set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
 " note: the final ';' is important. tells it to search upwards for semicolon
 set tags=.tags;
@@ -130,8 +129,28 @@ NeoBundle 'kien/ctrlp.vim'
 " searching
 NeoBundle "rking/ag.vim"
 
+" tagline
+NeoBundle "bling/vim-airline" "{{{
+  let g:airline#extensions#tabline#enabled = 1
+  let g:airline#extensions#tabline#left_sep = ' '
+  let g:airline#extensions#tabline#left_alt_sep = '¦'
+  let g:airline#extensions#tabline#buffer_idx_mode = 1
+  nmap <leader>1 <Plug>AirlineSelectTab1
+  nmap <leader>2 <Plug>AirlineSelectTab2
+  nmap <leader>3 <Plug>AirlineSelectTab3
+  nmap <leader>4 <Plug>AirlineSelectTab4
+  nmap <leader>5 <Plug>AirlineSelectTab5
+  nmap <leader>6 <Plug>AirlineSelectTab6
+  nmap <leader>7 <Plug>AirlineSelectTab7
+  nmap <leader>8 <Plug>AirlineSelectTab8
+  nmap <leader>9 <Plug>AirlineSelectTab9
+"}}}
+
 " commenting
 NeoBundle "scrooloose/nerdcommenter"
+
+" multiple selection (like sublime text)
+NeoBundle "terryma/vim-multiple-cursors"
 
 " auto complete!
 if has('lua')
@@ -159,6 +178,9 @@ NeoBundle 'sjl/badwolf'
 
 " vcs plugins
 NeoBundle 'matthauck/vimp4python'
+" git
+NeoBundle "tpope/vim-fugitive"
+
 
 " }}}
 
