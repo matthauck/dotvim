@@ -76,7 +76,7 @@ set smartcase
 set autoindent
 set expandtab
 let &tabstop=s:settings.default_indent
-let &softtabstop=s:settings.default_indent
+let &softtabstop=0 " keep the same as tabstop
 let &shiftwidth=s:settings.default_indent
 set laststatus=2
 set showmatch
@@ -227,7 +227,13 @@ map <leader>pf :P4Fstat<CR>
 " }}}
 
 " autocmd "{{{
-  autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+" auto strip trailing whitespace on save
+autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+
+" change indent settings per file type
+autocmd FileType ruby,haml,eruby,yaml,html,javascript,sass,cucumber setl ts=2 sw=2
+autocmd FileType python,c,cpp,java setl ts=4 sw=4
+
 "}}}
 
 " finish loading {{{
