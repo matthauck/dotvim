@@ -211,6 +211,11 @@ nnoremap <c-h> :FSHere<cr>
 " re-map ctrl+t to jump to tag definition
 map <c-t> <c-]><cr>
 
+
+ " formatting shortcuts
+nmap <leader>f$ :call StripTrailingWhitespace()<CR>
+vmap <leader>s :sort<cr>
+
 " p4
 map <leader>pe :P4Edit<CR>
 map <leader>pa :P4Add<CR>
