@@ -127,7 +127,7 @@ NeoBundle 'kien/ctrlp.vim' "{{{
 
   noremap <leader>t :CtrlP<CR>
   noremap <leader>r :CtrlPTag<cr>
-  noremap <leader>br :CtrlPBufTag<cr>
+  noremap <leader>R :CtrlPBufTag<cr>
 
   let g:ctrlp_match_window_reversed = 0
   let g:ctrlp_root_markers = ['.agignore', '.gitignore']
