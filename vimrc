@@ -177,7 +177,7 @@ NeoBundle 'derekwyatt/vim-fswitch' "{{{
 
 " allows closing buffer w/o closing window!
 NeoBundle 'rgarver/Kwbd.vim' "{{{
-  map <leader>bd <Plug>Kwbd
+  map <leader>q <Plug>Kwbd
 "}}}
 
 " color schemes
@@ -185,6 +185,11 @@ NeoBundle 'wesgibbs/vim-irblack'
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'sjl/badwolf'
+
+" build system
+NeoBundle "johnsyweb/vim-makeshift" "{{{
+  nnoremap <leader>b :<C-U>make<CR>
+"}}}
 
 " vcs plugins
 NeoBundle 'matthauck/vimp4python'
