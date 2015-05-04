@@ -147,7 +147,7 @@ NeoBundle 'kien/ctrlp.vim' "{{{
 " searching
 NeoBundle "rking/ag.vim"
 
-" tagline
+" statusline and tabline
 NeoBundle "bling/vim-airline" "{{{
   let g:airline#extensions#tabline#enabled = 1
 "}}}
