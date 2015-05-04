@@ -196,6 +196,23 @@ NeoBundle 'matthauck/vimp4python'
 " git
 NeoBundle "tpope/vim-fugitive"
 
+" file browsing
+NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+  let NERDTreeShowHidden=1
+  let NERDTreeQuitOnOpen=0
+  let NERDTreeShowLineNumbers=0
+  let NERDTreeChDirMode=0
+  let NERDTreeShowBookmarks=1
+  let NERDTreeIgnore=['\.git','\.hg']
+  let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
+
+  " open dir tree
+  nnoremap <leader>o :NERDTreeToggle<CR>
+  " open dir tree to current file
+  nnoremap <leader>O :NERDTreeFind<CR>
+"}}}
+NeoBundle 'Xuyuanp/nerdtree-git-plugin'
+
 " key mappings {{{
 
 " re-map to jump to tag definition
