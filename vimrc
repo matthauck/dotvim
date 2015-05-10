@@ -188,6 +188,9 @@ NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'sjl/badwolf'
 
+" languages
+NeoBundle "rust-lang/rust.vim"
+
 " build system
 NeoBundle "johnsyweb/vim-makeshift" "{{{
   nnoremap <leader>b :<C-U>make<CR>
