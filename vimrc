@@ -203,7 +203,7 @@ NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','
   let NERDTreeShowLineNumbers=0
   let NERDTreeChDirMode=0
   let NERDTreeShowBookmarks=1
-  let NERDTreeIgnore=['\.git','\.hg']
+  let NERDTreeIgnore=['\.git','\.hg', '\.\.$', '\.$', '\~$']
   let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
 
   " open dir tree
@@ -212,6 +212,8 @@ NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','
   nnoremap <leader>O :NERDTreeFind<CR>
 "}}}
 NeoBundle 'Xuyuanp/nerdtree-git-plugin'
+
+NeoBundle 'PProvost/vim-ps1'
 
 " key mappings {{{
 
