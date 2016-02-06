@@ -148,9 +148,11 @@ NeoBundle 'kien/ctrlp.vim' "{{{
 NeoBundle "rking/ag.vim"
 
 " statusline and tabline
-NeoBundle "bling/vim-airline" "{{{
+NeoBundle "vim-airline/vim-airline" "{{{
   let g:airline#extensions#tabline#enabled = 1
 "}}}
+
+NeoBundle "vim-airline/vim-airline-themes"
 
 " commenting
 NeoBundle "scrooloose/nerdcommenter"
