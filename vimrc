@@ -219,6 +219,31 @@ NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','
 "}}}
 NeoBundle 'Xuyuanp/nerdtree-git-plugin'
 
+" typescript syntax
+NeoBundle 'leafgarland/typescript-vim' "{{{
+  au BufRead,BufNewFile *.ts set filetype=typescript
+"}}}
+
+" typescript tooling
+NeoBundle 'Quramy/tsuquyomi' "{{{
+  " match sublime text mappings
+  map <c-t><c-d> :TsuquyomiDefinition<CR>
+  map <c-t><c-r> :TsuquyomiReferences<CR>
+"}}}
+
+
+NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build' : {
+      \     'windows' : 'tools\\update-dll-mingw',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'linux' : 'make',
+      \     'unix' : 'gmake',
+      \    },
+      \ }
+
+NeoBundle 'genoma/vim-less'
+
 " key mappings {{{
 
 " re-map to jump to tag definition
