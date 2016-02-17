@@ -131,7 +131,8 @@ NeoBundle 'kien/ctrlp.vim' "{{{
 
   let g:ctrlp_match_window_reversed = 0
   let g:ctrlp_root_markers = ['.agignore', '.gitignore']
-  let g:ctrlp_working_path_mode = 'ra'
+  " just use the directory vim is started in
+  let g:ctrlp_working_path_mode = ''
 
   if executable('ag')
     let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
