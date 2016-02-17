@@ -190,7 +190,9 @@ NeoBundle 'tomasr/molokai'
 NeoBundle 'sjl/badwolf'
 
 " languages
-NeoBundle "rust-lang/rust.vim"
+NeoBundle "rust-lang/rust.vim" "{{{
+  au BufRead,BufNewFile *.rs set filetype=rust 
+"}}}
 
 " build system
 NeoBundle "johnsyweb/vim-makeshift" "{{{
