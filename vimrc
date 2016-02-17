@@ -219,8 +219,6 @@ NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','
 "}}}
 NeoBundle 'Xuyuanp/nerdtree-git-plugin'
 
-NeoBundle 'PProvost/vim-ps1'
-
 " key mappings {{{
 
 " re-map to jump to tag definition
