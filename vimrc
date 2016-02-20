@@ -191,7 +191,7 @@ NeoBundle 'sjl/badwolf'
 
 " languages
 NeoBundle "rust-lang/rust.vim" "{{{
-  au BufRead,BufNewFile *.rs set filetype=rust 
+  au BufRead,BufNewFile *.rs set filetype=rust
 "}}}
 
 " build system
@@ -269,7 +269,7 @@ map <leader>pf :P4Fstat<CR>
 
 " autocmd "{{{
 " auto strip trailing whitespace on save
-autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+autocmd BufWritePre * call StripTrailingWhitespace()
 
 " change indent settings per file type
 autocmd FileType ruby,haml,eruby,yaml,html,javascript,sass,cucumber setl ts=2 sw=2
