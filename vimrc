@@ -20,20 +20,9 @@
     endif
   endfor
 
-" }}}
-
-" setup & neobundle {{{
   let s:cache_dir = '~/.vim/.cache'
 
-  set nocompatible
-  if s:is_windows
-    set runtimepath+=~/.vim
-  endif
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-  call neobundle#begin(expand('~/.vim/bundle/'))
-  NeoBundleFetch 'Shougo/neobundle.vim'
 " }}}
-
 
 " functions {{{
   function! s:get_cache_dir(suffix) "{{{
@@ -65,6 +54,19 @@
     endif
   endfunction "}}}
 "}}}
+
+
+" setup & neobundle {{{
+
+  set nocompatible
+  if s:is_windows
+    set runtimepath+=~/.vim
+  endif
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  call neobundle#begin(expand('~/.vim/bundle/'))
+  NeoBundleFetch 'Shougo/neobundle.vim'
+" }}}
+
 
 
 
