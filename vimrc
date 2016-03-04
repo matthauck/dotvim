@@ -56,15 +56,23 @@
 "}}}
 
 
-" setup & neobundle {{{
+" setup & dein {{{
 
   set nocompatible
   if s:is_windows
     set runtimepath+=~/.vim
   endif
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-  call neobundle#begin(expand('~/.vim/bundle/'))
-  NeoBundleFetch 'Shougo/neobundle.vim'
+
+  if !isdirectory(expand('~/.vim/dein/dein.vim'))
+      call mkdir(expand('~/.vim/dein'))
+      echo "Installing dein..."
+      !git -C ~/.vim/dein clone --quiet https://github.com/Shougo/dein.vim
+  endif
+
+  set runtimepath+=~/.vim/dein/dein.vim
+
+  call dein#begin(expand('~/.vim/dein/'))
+  call dein#add(expand('~/.vim/dein/dein.vim'))
 " }}}
 
 
@@ -124,8 +132,11 @@ endif
 
 " plugins {{{
 
+" add vimproc first for other things that depend on it
+call dein#add('Shougo/vimproc.vim', { 'build' : 'make' })
+
 " fuzzy file/tag searching
-NeoBundle 'kien/ctrlp.vim' "{{{
+call dein#add('kien/ctrlp.vim') "{{{
 
   noremap <leader>t :CtrlP<CR>
   noremap <leader>r :CtrlPTag<cr>
@@ -148,25 +159,25 @@ NeoBundle 'kien/ctrlp.vim' "{{{
 "}}}
 
 " searching
-NeoBundle "rking/ag.vim"
+call dein#add('rking/ag.vim')
 
 " statusline and tabline
-NeoBundle "vim-airline/vim-airline" "{{{
+call dein#add('vim-airline/vim-airline') "{{{
   let g:airline#extensions#tabline#enabled = 1
   let g:airline#extensions#syntastic#enabled = 1
 "}}}
 
-NeoBundle "vim-airline/vim-airline-themes"
+call dein#add('vim-airline/vim-airline-themes')
 
 " commenting
-NeoBundle "scrooloose/nerdcommenter"
+call dein#add('scrooloose/nerdcommenter')
 
 " multiple selection (like sublime text)
-NeoBundle "terryma/vim-multiple-cursors"
+call dein#add('terryma/vim-multiple-cursors')
 
 " auto complete!
 if has('lua')
-  NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'} "{{{
+  call dein#add('Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}) "{{{
     let g:neocomplete#enable_at_startup=1
     let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
     let g:neocomplete#sources#syntax#min_keyword_length = 3
@@ -177,38 +188,38 @@ if has('lua')
 endif
 
 " allows switching between cpp/h files
-NeoBundle 'derekwyatt/vim-fswitch' "{{{
+call dein#add('derekwyatt/vim-fswitch') "{{{
   nnoremap <leader>h :FSHere<cr>
 "}}}
 
 " allows closing buffer w/o closing window!
-NeoBundle 'rgarver/Kwbd.vim' "{{{
+call dein#add('rgarver/Kwbd.vim') "{{{
   map <leader>q <Plug>Kwbd
 "}}}
 
 " color schemes
-NeoBundle 'wesgibbs/vim-irblack'
-NeoBundle 'nanotech/jellybeans.vim'
-NeoBundle 'tomasr/molokai'
-NeoBundle 'sjl/badwolf'
+call dein#add('wesgibbs/vim-irblack')
+call dein#add('nanotech/jellybeans.vim')
+call dein#add('tomasr/molokai')
+call dein#add('sjl/badwolf')
 
 " languages
-NeoBundle "rust-lang/rust.vim" "{{{
+call dein#add('rust-lang/rust.vim') "{{{
   au BufRead,BufNewFile *.rs set filetype=rust
 "}}}
 
 " build system
-NeoBundle "johnsyweb/vim-makeshift" "{{{
+call dein#add('johnsyweb/vim-makeshift') "{{{
   nnoremap <leader>b :<C-U>make<CR>
 "}}}
 
 " vcs plugins
-NeoBundle 'matthauck/vimp4python'
+call dein#add('matthauck/vimp4python')
 " git
-NeoBundle "tpope/vim-fugitive"
+call dein#add('tpope/vim-fugitive')
 
 " file browsing
-NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+call dein#add('scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}}) "{{{
   let NERDTreeShowHidden=1
   let NERDTreeQuitOnOpen=0
   let NERDTreeShowLineNumbers=0
@@ -222,35 +233,24 @@ NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','
   " open dir tree to current file
   nnoremap <leader>O :NERDTreeFind<CR>
 "}}}
-NeoBundle 'Xuyuanp/nerdtree-git-plugin'
+call dein#add('Xuyuanp/nerdtree-git-plugin')
 
 " typescript syntax
-NeoBundle 'leafgarland/typescript-vim' "{{{
+call dein#add('leafgarland/typescript-vim') "{{{
   au BufRead,BufNewFile *.ts set filetype=typescript
 "}}}
 
 " typescript tooling
-NeoBundle 'Quramy/tsuquyomi' "{{{
+call dein#add('Quramy/tsuquyomi') "{{{
   " match sublime text mappings
   map <c-t><c-d> :TsuquyomiDefinition<CR>
   map <c-t><c-r> :TsuquyomiReferences<CR>
 "}}}
 
-
-NeoBundle 'Shougo/vimproc.vim', {
-      \ 'build' : {
-      \     'windows' : 'tools\\update-dll-mingw',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'linux' : 'make',
-      \     'unix' : 'gmake',
-      \    },
-      \ }
-
-NeoBundle 'genoma/vim-less'
+call dein#add('genoma/vim-less')
 
 " linting / syntax checking
-NeoBundle 'scrooloose/syntastic'
+call dein#add('scrooloose/syntastic')
 "let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_typescript_checkers = ['tslint']
@@ -296,17 +296,21 @@ autocmd FileType python,c,cpp,java setl ts=4 sw=4
 " finish loading {{{
   if exists('g:dotvim_settings.disabled_plugins')
     for plugin in g:dotvim_settings.disabled_plugins
-      exec 'NeoBundleDisable '.plugin
+      "FIXME exec 'NeoBundleDisable '.plugin
     endfor
   endif
 
-  call neobundle#end()
+  call dein#end()
+
+  if dein#check_install()
+    call dein#install()
+  endif
+
   filetype plugin indent on
   syntax enable
   if has_key(s:settings, 'colorscheme')
     exec 'colorscheme '.s:settings.colorscheme
   endif
 
-  NeoBundleCheck
 "}}}
 
