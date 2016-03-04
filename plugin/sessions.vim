@@ -22,4 +22,4 @@ function! sessions#NewSession(name)
   call s:OnLoadedSession()
 endfunction
 
-
+command! -nargs=1 NewSession call s:NewSession(<f-args>)
