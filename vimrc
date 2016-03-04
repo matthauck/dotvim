@@ -65,8 +65,8 @@
 
   if !isdirectory(expand('~/.vim/dein/dein.vim'))
       call mkdir(expand('~/.vim/dein'))
-      echo "Installing dein..."
-      !git -C ~/.vim/dein clone --quiet https://github.com/Shougo/dein.vim
+      echo "Cloning https://github.com/Shougo/dein.vim..."
+      exe 'silent !git -C ~/.vim/dein clone --quiet https://github.com/Shougo/dein.vim'
   endif
 
   set runtimepath+=~/.vim/dein/dein.vim
