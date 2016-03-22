@@ -151,6 +151,7 @@ NeoBundle "rking/ag.vim"
 " statusline and tabline
 NeoBundle "vim-airline/vim-airline" "{{{
   let g:airline#extensions#tabline#enabled = 1
+  let g:airline#extensions#syntastic#enabled = 1
 "}}}
 
 NeoBundle "vim-airline/vim-airline-themes"
@@ -245,6 +246,19 @@ NeoBundle 'Shougo/vimproc.vim', {
       \ }
 
 NeoBundle 'genoma/vim-less'
+
+" linting / syntax checking
+NeoBundle 'scrooloose/syntastic'
+"let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_typescript_checkers = ['tslint']
+let g:syntastic_mode_map = {
+      \  "mode": "active",
+      \  "active_filetypes": [ "typescript" ],
+      \  "passive_filetypes": []
+      \ }
+
+map <leader>l :SyntasticCheck<CR>
 
 " key mappings {{{
 
