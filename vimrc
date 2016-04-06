@@ -129,7 +129,6 @@ endif
 
 "}}}
 
-
 " plugins {{{
 
 " add vimproc first for other things that depend on it
@@ -171,14 +170,10 @@ call dein#add('vim-airline/vim-airline') "{{{
   let g:airline#extensions#tabline#enabled = 1
   let g:airline#extensions#syntastic#enabled = 1
 "}}}
-
 call dein#add('vim-airline/vim-airline-themes')
 
 " commenting
 call dein#add('scrooloose/nerdcommenter')
-
-" multiple selection (like sublime text)
-call dein#add('terryma/vim-multiple-cursors')
 
 " auto complete!
 if has('lua')
@@ -209,18 +204,40 @@ call dein#add('tomasr/molokai')
 call dein#add('sjl/badwolf')
 
 " languages
-call dein#add('rust-lang/rust.vim') "{{{
-  au BufRead,BufNewFile *.rs set filetype=rust
+call dein#add('rust-lang/rust.vim')
+call dein#add('genoma/vim-less')
+call dein#add('leafgarland/typescript-vim')
+
+" typescript tooling
+call dein#add('Quramy/tsuquyomi') "{{{
+  " match sublime text mappings
+  map <c-t><c-d> :TsuquyomiDefinition<CR>
+  map <c-t><c-r> :TsuquyomiReferences<CR>
 "}}}
 
-" build system
-call dein#add('johnsyweb/vim-makeshift') "{{{
-  nnoremap <leader>b :<C-U>make<CR>
-"}}}
+" linting / syntax checking
+call dein#add('scrooloose/syntastic')
+"let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_typescript_checkers = ['tslint']
+let g:syntastic_mode_map = {
+      \  "mode": "active",
+      \  "active_filetypes": [ "typescript" ],
+      \  "passive_filetypes": []
+      \ }
+
+map <leader>l :SyntasticCheck<CR>
 
 " vcs plugins
-call dein#add('matthauck/vimp4python')
-" git
+call dein#add('matthauck/vimp4python') "{{{
+  map <leader>pe :P4Edit<CR>
+  map <leader>pa :P4Add<CR>
+  map <leader>pr :P4Revert<CR>
+  map <leader>pd :P4Diff<CR>
+  map <leader>pl :P4Filelog<CR>
+  map <leader>pf :P4Fstat<CR>
+" }}}
+
 call dein#add('tpope/vim-fugitive')
 
 " file browsing
@@ -240,55 +257,21 @@ call dein#add('scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','
 "}}}
 call dein#add('Xuyuanp/nerdtree-git-plugin')
 
-" typescript syntax
-call dein#add('leafgarland/typescript-vim') "{{{
-  au BufRead,BufNewFile *.ts set filetype=typescript
-"}}}
+" misc. key mappings {{{
+  " re-map to jump to tag definition
+  map <leader>g <c-]><cr>
 
-" typescript tooling
-call dein#add('Quramy/tsuquyomi') "{{{
-  " match sublime text mappings
-  map <c-t><c-d> :TsuquyomiDefinition<CR>
-  map <c-t><c-r> :TsuquyomiReferences<CR>
-"}}}
+   " formatting shortcuts
+  nmap <leader>f$ :call StripTrailingWhitespace()<CR>
+  vmap <leader>s :sort<cr>
 
-call dein#add('genoma/vim-less')
-
-" linting / syntax checking
-call dein#add('scrooloose/syntastic')
-"let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_typescript_checkers = ['tslint']
-let g:syntastic_mode_map = {
-      \  "mode": "active",
-      \  "active_filetypes": [ "typescript" ],
-      \  "passive_filetypes": []
-      \ }
-
-map <leader>l :SyntasticCheck<CR>
-
-" key mappings {{{
-
-" re-map to jump to tag definition
-map <leader>g <c-]><cr>
-
- " formatting shortcuts
-nmap <leader>f$ :call StripTrailingWhitespace()<CR>
-vmap <leader>s :sort<cr>
-
-nnoremap <leader>w :w<cr>
-
-" p4
-map <leader>pe :P4Edit<CR>
-map <leader>pa :P4Add<CR>
-map <leader>pr :P4Revert<CR>
-map <leader>pd :P4Diff<CR>
-map <leader>pl :P4Filelog<CR>
-map <leader>pf :P4Fstat<CR>
-
+  nnoremap <leader>w :w<cr>
 " }}}
 
 " autocmd "{{{
+
+autocmd BufRead,BufNewFile *.rs set filetype=rust
+
 " auto strip trailing whitespace on save
 autocmd BufWritePre * call StripTrailingWhitespace()
 
