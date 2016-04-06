@@ -161,6 +161,11 @@ call dein#add('kien/ctrlp.vim') "{{{
 " searching
 call dein#add('rking/ag.vim')
 
+" yank history
+call dein#add('vim-scripts/YankRing.vim') "{{{
+  nnoremap <leader>P :YRShow<CR>
+"}}}
+
 " statusline and tabline
 call dein#add('vim-airline/vim-airline') "{{{
   let g:airline#extensions#tabline#enabled = 1
