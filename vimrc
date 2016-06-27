@@ -229,16 +229,6 @@ let g:syntastic_mode_map = {
 
 map <leader>l :SyntasticCheck<CR>
 
-" vcs plugins
-call dein#add('matthauck/vimp4python') "{{{
-  map <leader>pe :P4Edit<CR>
-  map <leader>pa :P4Add<CR>
-  map <leader>pr :P4Revert<CR>
-  map <leader>pd :P4Diff<CR>
-  map <leader>pl :P4Filelog<CR>
-  map <leader>pf :P4Fstat<CR>
-" }}}
-
 call dein#add('tpope/vim-fugitive')
 
 " file browsing
