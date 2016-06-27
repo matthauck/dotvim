@@ -53,6 +53,11 @@
       call mkdir(expand(a:path))
     endif
   endfunction "}}}
+
+  function! DeinClean()
+    " https://github.com/Shougo/dein.vim/issues/71
+    map(dein#check_clean(), "delete(v:val, 'rf')")
+  endfunction
 "}}}
 
 
