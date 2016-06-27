@@ -207,6 +207,7 @@ call dein#add('sjl/badwolf')
 call dein#add('rust-lang/rust.vim')
 call dein#add('genoma/vim-less')
 call dein#add('leafgarland/typescript-vim')
+call dein#add('fatih/vim-go')
 
 " typescript tooling
 call dein#add('Quramy/tsuquyomi') "{{{
