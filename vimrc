@@ -222,9 +222,16 @@ call dein#add('Quramy/tsuquyomi') "{{{
 "}}}
 
 " linting / syntax checking
+call dein#add('rhysd/vim-clang-format') "{{{
+  autocmd FileType c,cpp nnoremap <buffer><Leader>cf :ClangFormat<CR>
+  autocmd FileType c,cpp vnoremap <buffer><Leader>cf :ClangFormat<CR>
+  " Toggle auto formatting:
+  " autocmd FileType c,cpp ClangFormatAutoEnable
+"}}}
+
 call dein#add('scrooloose/syntastic')
 "let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"let g:syntastic_check_on_wq = 0
 let g:syntastic_typescript_checkers = ['tslint']
 let g:syntastic_mode_map = {
       \  "mode": "active",
