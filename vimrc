@@ -209,7 +209,11 @@ call dein#add('tomasr/molokai')
 call dein#add('sjl/badwolf')
 
 " languages
-call dein#add('rust-lang/rust.vim')
+call dein#add('rust-lang/rust.vim') "{{{
+  autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
+  autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
+"}}}
+
 call dein#add('genoma/vim-less')
 call dein#add('leafgarland/typescript-vim')
 call dein#add('fatih/vim-go')
