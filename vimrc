@@ -58,6 +58,35 @@
     " https://github.com/Shougo/dein.vim/issues/71
     map(dein#check_clean(), "delete(v:val, 'rf')")
   endfunction
+
+  function! SwitchToTest()
+    let dest = ""
+    if expand("%") =~ "_test\\.cpp"
+      let dest = substitute(expand("%"), "_test\\.cpp$", ".cpp", "")
+    else
+      let dest = substitute(expand("%"), "\\.cpp$", "_test.cpp", "")
+    endif
+    if dest != ""
+      execute "edit " . dest
+    endif
+  endfunction()
+
+  function! SwitchToHeader()
+    let dest = ""
+    if expand("%") =~ "\\.cpp$"
+      let dest = substitute(expand("%"), "\\.cpp$", ".h", "")
+    elseif expand("%") =~ "\\.c$"
+      let dest = substitute(expand("%"), "\\.c$", ".h", "")
+      execute "edit " . dest
+    elseif expand("%") =~ "\.h"
+      let dest = substitute(expand("%"), "\\.h$", ".cpp", "")
+      execute "edit " . dest
+    endif
+    if dest != ""
+      execute "edit " . dest
+    endif
+  endfunction()
+
 "}}}
 
 
@@ -134,6 +163,7 @@ endif
 
 "}}}
 
+
 " plugins {{{
 
 " add vimproc first for other things that depend on it
@@ -191,11 +221,6 @@ if has('lua')
     inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
   " }}}
 endif
-
-" allows switching between cpp/h files
-call dein#add('derekwyatt/vim-fswitch') "{{{
-  nnoremap <leader>h :FSHere<cr>
-"}}}
 
 " allows closing buffer w/o closing window!
 call dein#add('rgarver/Kwbd.vim') "{{{
@@ -265,6 +290,12 @@ call dein#add('scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','
 call dein#add('Xuyuanp/nerdtree-git-plugin')
 
 " misc. key mappings {{{
+
+  " switch to header
+  nnoremap <leader>h :call SwitchToHeader()<cr>
+  " switch to test file
+  nnoremap <leader>H :call SwitchToTest()<cr>
+
   " re-map to jump to tag definition
   map <leader>g <c-]><cr>
 
