@@ -63,8 +63,10 @@
     let dest = ""
     if expand("%") =~ "_test\\.cpp"
       let dest = substitute(expand("%"), "_test\\.cpp$", ".cpp", "")
-    else
+    elseif expand("%") =~ "\\.cpp$"
       let dest = substitute(expand("%"), "\\.cpp$", "_test.cpp", "")
+    elseif expand("%") =~ "\\.h$"
+      let dest = substitute(expand("%"), "\\.h$", "_test.cpp", "")
     endif
     if dest != ""
       execute "edit " . dest
@@ -170,7 +172,7 @@ endif
 call dein#add('Shougo/vimproc.vim', { 'build' : 'make' })
 
 " fuzzy file/tag searching
-call dein#add('kien/ctrlp.vim') "{{{
+call dein#add('ctrlpvim/ctrlp.vim') "{{{
 
   noremap <leader>t :CtrlP<CR>
   noremap <leader>r :CtrlPTag<cr>
@@ -238,6 +240,7 @@ call dein#add('rust-lang/rust.vim') "{{{
   autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
   autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
 "}}}
+call dein#add('cespare/vim-toml')
 
 call dein#add('genoma/vim-less')
 call dein#add('leafgarland/typescript-vim')
