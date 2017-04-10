@@ -12,6 +12,7 @@
   let s:settings = {}
   let s:settings.colorscheme = 'jellybeans'
   let s:settings.default_indent = 2
+  let g:autostrip = 1
 
   " override defaults with the ones specified in g:dotvim_settings
   for key in keys(s:settings)
@@ -48,6 +49,11 @@
   function! StripTrailingWhitespace() "{{{
     call Preserve("%s/\\s\\+$//e")
   endfunction "}}}
+  function! MaybeStripTrailingWhitespace()
+    if g:autostrip
+      call StripTrailingWhitespace()
+    endif
+  endfunction()
   function! EnsureExists(path) "{{{
     if !isdirectory(expand(a:path))
       call mkdir(expand(a:path))
@@ -314,7 +320,7 @@ call dein#add('Xuyuanp/nerdtree-git-plugin')
 autocmd BufRead,BufNewFile *.rs set filetype=rust
 
 " auto strip trailing whitespace on save
-autocmd BufWritePre * call StripTrailingWhitespace()
+autocmd BufWritePre * call MaybeStripTrailingWhitespace()
 
 " change indent settings per file type
 autocmd FileType ruby,haml,eruby,yaml,html,javascript,sass,cucumber setl ts=2 sw=2
