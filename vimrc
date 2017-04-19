@@ -189,7 +189,11 @@ call dein#add('ctrlpvim/ctrlp.vim') "{{{
   " just use the directory vim is started in
   let g:ctrlp_working_path_mode = ''
 
-  if executable('ag')
+  let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+
+  if isdirectory('.git')
+    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+  elseif executable('ag')
     let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
           \ --ignore .git
           \ --ignore .svn
