@@ -333,6 +333,10 @@ autocmd FileType python,c,cpp,java setl ts=4 sw=4
 " Enable spell check for git commit messages
 autocmd FileType gitcommit setlocal spell
 
+" I often typo these...
+command Qa :qa
+command Wq :wq
+
 "}}}
 
 " finish loading {{{
