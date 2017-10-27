@@ -330,6 +330,9 @@ autocmd BufWritePre * call MaybeStripTrailingWhitespace()
 autocmd FileType ruby,haml,eruby,yaml,html,javascript,sass,cucumber setl ts=2 sw=2
 autocmd FileType python,c,cpp,java setl ts=4 sw=4
 
+" Enable spell check for git commit messages
+autocmd FileType gitcommit setlocal spell
+
 "}}}
 
 " finish loading {{{
