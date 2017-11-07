@@ -205,7 +205,7 @@ call dein#add('ctrlpvim/ctrlp.vim') "{{{
 "}}}
 
 " searching
-call dein#add('rking/ag.vim')
+call dein#add('jremmen/vim-ripgrep')
 
 " yank history
 call dein#add('vim-scripts/YankRing.vim') "{{{
