@@ -125,45 +125,15 @@ Plug 'sheerun/vim-polyglot'
 " fuzzy file/tag searching
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-
-  map <leader>t :GFiles<cr>
-  map <leader>T :Files<cr>
-  map <leader>r :Tags<cr>
-  map <leader>R :BTags<cr>
-
   let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h | %<(20,trunc)%an | %s"'
-
-  "  Searching through file contents using `rg` with fzf for fuzzy-searchign
-  "  through results
-  "
-  " --column: Show column number
-  " --line-number: Show line number
-  " --no-heading: Do not show file headings in results
-  " --fixed-strings: Search term as a literal string
-  " --ignore-case: Case insensitive search
-  " --no-ignore: Do not respect .gitignore, etc...
-  " --hidden: Search hidden files and folders
-  " --follow: Follow symlinks
-  " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
-  " --color: Search color options
-  command! -bang -nargs=* Rg
-    \ call fzf#vim#grep(
-    \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-    \   <bang>0 ? fzf#vim#with_preview('up:60%')
-    \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \   <bang>0)
-
 
 " yank history
 Plug 'vim-scripts/YankRing.vim'
-  nnoremap <leader>P :YRShow<CR>
 
 " statusline and tabline
 Plug 'vim-airline/vim-airline'
-
-  let g:airline#extensions#tabline#enabled = 1
-
 Plug 'vim-airline/vim-airline-themes'
+  let g:airline#extensions#tabline#enabled = 1
 
 " commenting
 Plug 'scrooloose/nerdcommenter'
@@ -181,18 +151,11 @@ endif
 
 " allows closing buffer w/o closing window!
 Plug 'rgarver/Kwbd.vim'
-
-  map <leader>q <Plug>Kwbd
-
 " color schemes
-Plug 'wesgibbs/vim-irblack'
 Plug 'nanotech/jellybeans.vim'
-Plug 'tomasr/molokai'
-Plug 'sjl/badwolf'
-
 " linting / syntax checking
 Plug 'rhysd/vim-clang-format'
-
+" git
 Plug 'tpope/vim-fugitive'
 
 " file browsing
@@ -204,14 +167,7 @@ Plug 'scrooloose/nerdtree', {'on':['NERDTreeToggle','NERDTreeFind']}
   let NERDTreeShowBookmarks=1
   let NERDTreeIgnore=['\.git','\.hg', '\.\.$', '\.$', '\~$']
   let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
-
-  " open dir tree
-  nnoremap <leader>o :NERDTreeToggle<CR>
-  " open dir tree to current file
-  nnoremap <leader>O :NERDTreeFind<CR>
-
 Plug 'Xuyuanp/nerdtree-git-plugin'
-
 
 " finish vim-plug
 call plug#end()
@@ -223,14 +179,50 @@ endif
 " Shortcuts
 """""""""""""""""
 
+" formatting
 autocmd FileType c,cpp nnoremap <buffer><Leader>cf :ClangFormat<CR>
 autocmd FileType c,cpp vnoremap <buffer><Leader>cf :ClangFormat<CR>
 autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
 autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
 
+" fuzzy-searching
+map <leader>t :GFiles<cr>
+map <leader>T :Files<cr>
+map <leader>r :Tags<cr>
+map <leader>R :BTags<cr>
+
+" open dir tree
+nnoremap <leader>o :NERDTreeToggle<CR>
+" open dir tree to current file
+nnoremap <leader>O :NERDTreeFind<CR>
+
+" misc
+nnoremap <leader>P :YRShow<CR>
+map <leader>q <Plug>Kwbd
 
 " Custom functions
 """"""""""""""""""
+
+" :Rg
+"  Searching through file contents using `rg` with fzf for fuzzy-searchign
+"  through results
+"
+" --column: Show column number
+" --line-number: Show line number
+" --no-heading: Do not show file headings in results
+" --fixed-strings: Search term as a literal string
+" --ignore-case: Case insensitive search
+" --no-ignore: Do not respect .gitignore, etc...
+" --hidden: Search hidden files and folders
+" --follow: Follow symlinks
+" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+" --color: Search color options
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 
 function! StripTrailingWhitespace()
   call s:preserve_pos("%s/\\s\\+$//e")
