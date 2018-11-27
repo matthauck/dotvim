@@ -119,6 +119,9 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+" languages
+Plug 'sheerun/vim-polyglot'
+
 " fuzzy file/tag searching
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -182,41 +185,14 @@ Plug 'rgarver/Kwbd.vim'
 
   map <leader>q <Plug>Kwbd
 
-
 " color schemes
 Plug 'wesgibbs/vim-irblack'
 Plug 'nanotech/jellybeans.vim'
 Plug 'tomasr/molokai'
 Plug 'sjl/badwolf'
 
-" languages
-Plug 'rust-lang/rust.vim'
-
-  autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
-  autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
-
-Plug 'cespare/vim-toml'
-
-Plug 'genoma/vim-less'
-Plug 'leafgarland/typescript-vim'
-Plug 'fatih/vim-go'
-
-" typescript tooling
-Plug 'Quramy/tsuquyomi'
-
-  " match sublime text mappings
-  map <c-t><c-d> :TsuquyomiDefinition<CR>
-  map <c-t><c-r> :TsuquyomiReferences<CR>
-
-
 " linting / syntax checking
 Plug 'rhysd/vim-clang-format'
-
-  autocmd FileType c,cpp nnoremap <buffer><Leader>cf :ClangFormat<CR>
-  autocmd FileType c,cpp vnoremap <buffer><Leader>cf :ClangFormat<CR>
-  " Toggle auto formatting:
-  " autocmd FileType c,cpp ClangFormatAutoEnable
-
 
 Plug 'scrooloose/syntastic'
 "let g:syntastic_check_on_open = 1
@@ -256,6 +232,15 @@ call plug#end()
 if s:first_install
   exec 'PlugInstall'
 endif
+
+" Shortcuts
+"""""""""""""""""
+
+autocmd FileType c,cpp nnoremap <buffer><Leader>cf :ClangFormat<CR>
+autocmd FileType c,cpp vnoremap <buffer><Leader>cf :ClangFormat<CR>
+autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
+autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
+
 
 " Custom functions
 """"""""""""""""""
