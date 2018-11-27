@@ -139,15 +139,10 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdcommenter'
 
 " auto complete!
-if has('lua')
-  Plug 'Shougo/neocomplete.vim', {'autoload':{'insert':1}, 'vim_version':'7.3.885'}
-    let g:neocomplete#enable_at_startup=1
-    let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
-    let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-    " tab completion
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-endif
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+  let g:deoplete#enable_at_startup = 1
 
 " allows closing buffer w/o closing window!
 Plug 'rgarver/Kwbd.vim'
@@ -199,6 +194,9 @@ nnoremap <leader>O :NERDTreeFind<CR>
 " misc
 nnoremap <leader>P :YRShow<CR>
 map <leader>q <Plug>Kwbd
+
+" tab completion
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " Custom functions
 """"""""""""""""""
