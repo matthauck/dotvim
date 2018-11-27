@@ -119,9 +119,6 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-" add vimproc first for other things that depend on it
-Plug 'Shougo/vimproc.vim', { 'do' : 'make' }
-
 " fuzzy file/tag searching
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
