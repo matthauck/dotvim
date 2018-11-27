@@ -123,33 +123,36 @@ call plug#begin('~/.vim/plugged')
 Plug 'Shougo/vimproc.vim', { 'do' : 'make' }
 
 " fuzzy file/tag searching
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
-  noremap <leader>t :CtrlP<CR>
-  noremap <leader>r :CtrlPTag<cr>
-  noremap <leader>R :CtrlPBufTag<cr>
+  map <leader>t :GFiles<cr>
+  map <leader>T :Files<cr>
+  map <leader>r :Tags<cr>
+  map <leader>R :BTags<cr>
 
-  let g:ctrlp_match_window_reversed = 0
-  let g:ctrlp_root_markers = ['.agignore', '.gitignore']
-  " just use the directory vim is started in
-  let g:ctrlp_working_path_mode = ''
+  let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h | %<(20,trunc)%an | %s"'
 
-  let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+  "  Searching through file contents using `rg` with fzf for fuzzy-searchign
+  "  through results
+  "
+  " --column: Show column number
+  " --line-number: Show line number
+  " --no-heading: Do not show file headings in results
+  " --fixed-strings: Search term as a literal string
+  " --ignore-case: Case insensitive search
+  " --no-ignore: Do not respect .gitignore, etc...
+  " --hidden: Search hidden files and folders
+  " --follow: Follow symlinks
+  " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+  " --color: Search color options
+  command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+    \   <bang>0 ? fzf#vim#with_preview('up:60%')
+    \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+    \   <bang>0)
 
-  if isdirectory('.git')
-    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-  elseif executable('ag')
-    let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-          \ --ignore .git
-          \ --ignore .svn
-          \ --ignore .hg
-          \ --ignore .DS_Store
-          \ --ignore "**/*.pyc"
-          \ -g ""'
-  endif
-
-" searching
-Plug 'jremmen/vim-ripgrep'
 
 " yank history
 Plug 'vim-scripts/YankRing.vim'
@@ -341,3 +344,4 @@ endif
 
 " Credit:
 " * https://github.com/bling/dotvim
+" * https://github.com/sdball/dotfiles/
