@@ -162,7 +162,6 @@ Plug 'vim-scripts/YankRing.vim'
 Plug 'vim-airline/vim-airline'
 
   let g:airline#extensions#tabline#enabled = 1
-  let g:airline#extensions#syntastic#enabled = 1
 
 Plug 'vim-airline/vim-airline-themes'
 
@@ -193,18 +192,6 @@ Plug 'sjl/badwolf'
 
 " linting / syntax checking
 Plug 'rhysd/vim-clang-format'
-
-Plug 'scrooloose/syntastic'
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-let g:syntastic_typescript_checkers = ['tslint']
-let g:syntastic_mode_map = {
-      \  "mode": "active",
-      \  "active_filetypes": [ "typescript" ],
-      \  "passive_filetypes": []
-      \ }
-
-map <leader>l :SyntasticCheck<CR>
 
 Plug 'tpope/vim-fugitive'
 
