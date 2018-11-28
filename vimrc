@@ -139,10 +139,16 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdcommenter'
 
 " auto complete!
-Plug 'Shougo/deoplete.nvim'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-  let g:deoplete#enable_at_startup = 1
+if has('nvim') || v:version >= 803
+  Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+else
+  if has('lua')
+    Plug 'Shougo/neocomplete.vim'
+      let g:neocomplete#enable_at_startup=1
+      let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
+      let g:neocomplete#sources#syntax#min_keyword_length = 3
+  endif
+endif
 
 " allows closing buffer w/o closing window!
 Plug 'rgarver/Kwbd.vim'
