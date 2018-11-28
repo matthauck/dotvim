@@ -10,6 +10,9 @@ let s:is_macvim = has('gui_macvim')
 if s:is_windows
   set runtimepath+=~/.vim
 endif
+if has('nvim')
+  set runtimepath+=~/.vim
+endif
 
 " dotvim settings
 let s:settings = {}
