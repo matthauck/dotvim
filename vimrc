@@ -184,8 +184,8 @@ endif
 """""""""""""""""
 
 " formatting
-autocmd FileType c,cpp nnoremap <buffer><Leader>cf :ClangFormat<CR>
-autocmd FileType c,cpp vnoremap <buffer><Leader>cf :ClangFormat<CR>
+autocmd FileType c,cpp,proto nnoremap <buffer><Leader>cf :ClangFormat<CR>
+autocmd FileType c,cpp,proto vnoremap <buffer><Leader>cf :ClangFormat<CR>
 autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
 autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
 
