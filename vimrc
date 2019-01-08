@@ -271,6 +271,15 @@ function! SwitchToHeader()
   endif
 endfunction()
 
+function! AddHeaderGuard()
+  let guard = substitute(expand('%:t:r'), '\(\u*\l\+\)', '\1_', 'g')
+  let guard = substitute(guard, '\(\u\{2,\}\)\(\u\)', '\1_\2', 'g')
+  let guard = toupper(guard . 'h')
+  call append(line('^'), [ '#ifndef ' . guard, '#define ' . guard, '', '' ])
+  call append(line('$'), [ '#endif' ])
+  normal k
+endfunction
+
 " switch to header
 nnoremap <leader>h :call SwitchToHeader()<cr>
 " switch to test file
@@ -284,6 +293,8 @@ nmap <leader>f$ :call StripTrailingWhitespace()<CR>
 vmap <leader>s :sort<cr>
 
 nnoremap <leader>w :w<cr>
+
+map <leader>ig :call AddHeaderGuard()<cr>
 
 " autocmd
 """""""""
