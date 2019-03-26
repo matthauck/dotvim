@@ -190,7 +190,11 @@ autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
 autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
 
 " fuzzy-searching
-map <leader>t :GFiles<cr>
+if isdirectory(".git")
+  map <leader>t :GFiles<cr>
+else
+  map <leader>t :Files<cr>
+endif
 map <leader>T :Files<cr>
 map <leader>r :Tags<cr>
 map <leader>R :BTags<cr>
@@ -262,8 +266,17 @@ function! SwitchToHeader()
   elseif expand("%") =~ "\\.c$"
     let dest = substitute(expand("%"), "\\.c$", ".h", "")
     execute "edit " . dest
+  elseif expand("%") =~ "\\.cc$"
+    let dest = substitute(expand("%"), "\\.cc$", ".h", "")
+    execute "edit " . dest
   elseif expand("%") =~ "\.h"
-    let dest = substitute(expand("%"), "\\.h$", ".cpp", "")
+    let dest = substitute(expand("%"), "\\.h$", ".c", "")
+    if !filereadable(dest)
+      let dest = substitute(expand("%"), "\\.h$", ".cc", "")
+    endif
+    if !filereadable(dest)
+      let dest = substitute(expand("%"), "\\.h$", ".cpp", "")
+    endif
     execute "edit " . dest
   endif
   if dest != ""
