@@ -125,6 +125,9 @@ call plug#begin('~/.vim/plugged')
 " languages
 Plug 'sheerun/vim-polyglot'
 
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+
 " fuzzy file/tag searching
 Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
@@ -143,7 +146,11 @@ Plug 'scrooloose/nerdcommenter'
 
 " auto complete!
 if has('nvim') || v:version >= 803
-  Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+  Plug 'dense-analysis/ale'
+
+  let g:ale_linters = {
+	\ 'go': ['gopls'],
+	\}
 else
   if has('lua')
     Plug 'Shougo/neocomplete.vim'
@@ -159,6 +166,7 @@ Plug 'rgarver/Kwbd.vim'
 Plug 'nanotech/jellybeans.vim'
 " linting / syntax checking
 Plug 'rhysd/vim-clang-format'
+Plug 'editorconfig/editorconfig-vim'
 " git
 Plug 'tpope/vim-fugitive'
 
@@ -249,6 +257,10 @@ function! SwitchToTest()
     let dest = substitute(expand("%"), "\\.cpp$", "_test.cpp", "")
   elseif expand("%") =~ "\\.h$"
     let dest = substitute(expand("%"), "\\.h$", "_test.cpp", "")
+  elseif expand("%") =~ "_test\\.go$"
+    let dest = substitute(expand("%"), "_test\\.go$", ".go", "")
+  elseif expand("%") =~ "\\.go$"
+    let dest = substitute(expand("%"), "\\.go$", "_test.go", "")
   endif
   if dest != ""
     execute "edit " . dest
@@ -296,6 +308,9 @@ autocmd BufWritePre * call MaybeStripTrailingWhitespace()
 " change indent settings per file type
 autocmd FileType ruby,haml,eruby,yaml,html,javascript,sass,cucumber setl ts=2 sw=2
 autocmd FileType python,c,cpp,java setl ts=4 sw=4
+
+" auto format
+autocmd FileType go AutoFormatBuffer gofmt
 
 " Enable spell check for git commit messages
 autocmd FileType gitcommit setlocal spell
