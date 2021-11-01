@@ -6,6 +6,8 @@ let s:is_windows = has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
+set completeopt=menu
+
 " always use .vim
 if s:is_windows
   set runtimepath+=~/.vim
@@ -125,12 +127,17 @@ call plug#begin('~/.vim/plugged')
 " languages
 Plug 'sheerun/vim-polyglot'
 
+" special language support
+Plug 'sheerun/vim-go'
+
 " fuzzy file/tag searching
 Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
   let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h | %<(20,trunc)%an | %s"'
 
 " yank history
+"(disable excessive mappings)
+let g:yankring_enabled = 1
 Plug 'vim-scripts/YankRing.vim'
 
 " statusline and tabline
@@ -141,16 +148,30 @@ Plug 'vim-airline/vim-airline-themes'
 " commenting
 Plug 'scrooloose/nerdcommenter'
 
+let $CARGO_TARGET_DIR = 'target/analyze/'
+
 " auto complete!
-if has('nvim') || v:version >= 803
-  Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-else
-  if has('lua')
-    Plug 'Shougo/neocomplete.vim'
-      let g:neocomplete#enable_at_startup=1
-      let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
-      let g:neocomplete#sources#syntax#min_keyword_length = 3
-  endif
+if has('nvim')
+
+  Plug 'neovim/nvim-lspconfig'
+
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.*' }
+
+  Plug 'folke/trouble.nvim'
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'folke/lsp-colors.nvim'
+
+  Plug 'hrsh7th/cmp-nvim-lsp'              " LSP source for nvim-cmp
+  Plug 'hrsh7th/nvim-cmp'                  " Autocompletion plugin
+  Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'} " Snippets plugin
+  Plug 'saadparwaiz1/cmp_luasnip'          " Snippets source for nvim-cmp
+
+elseif has('lua')
+  Plug 'Shougo/neocomplete.vim'
+    let g:neocomplete#enable_at_startup=1
+    let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
 endif
 
 " allows closing buffer w/o closing window!
@@ -158,7 +179,7 @@ Plug 'rgarver/Kwbd.vim'
 " color schemes
 Plug 'nanotech/jellybeans.vim'
 " linting / syntax checking
-Plug 'rhysd/vim-clang-format'
+Plug 'google/vim-codefmt'
 " git
 Plug 'tpope/vim-fugitive'
 
@@ -173,6 +194,9 @@ Plug 'scrooloose/nerdtree', {'on':['NERDTreeToggle','NERDTreeFind']}
   let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
+" vimscript plugin library
+Plug 'google/vim-maktaba'
+
 " finish vim-plug
 call plug#end()
 
@@ -180,21 +204,16 @@ if s:first_install
   exec 'PlugInstall'
 endif
 
+
 " Shortcuts
 """""""""""""""""
 
 " formatting
-autocmd FileType c,cpp,proto nnoremap <buffer><Leader>cf :ClangFormat<CR>
-autocmd FileType c,cpp,proto vnoremap <buffer><Leader>cf :ClangFormat<CR>
-autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
-autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
+nnoremap <buffer><Leader>cf :FormatCode<CR>
+vnoremap <buffer><Leader>cf :FormatLines<CR>
 
 " fuzzy-searching
-if isdirectory(".git")
-  map <leader>t :GFiles<cr>
-else
-  map <leader>t :Files<cr>
-endif
+map <leader>t :GFiles<cr>
 map <leader>T :Files<cr>
 map <leader>r :Tags<cr>
 map <leader>R :BTags<cr>
@@ -207,9 +226,6 @@ nnoremap <leader>O :NERDTreeFind<CR>
 " misc
 nnoremap <leader>P :YRShow<CR>
 map <leader>q <Plug>Kwbd
-
-" tab completion
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " Custom functions
 """"""""""""""""""
@@ -253,6 +269,10 @@ function! SwitchToTest()
     let dest = substitute(expand("%"), "\\.cpp$", "_test.cpp", "")
   elseif expand("%") =~ "\\.h$"
     let dest = substitute(expand("%"), "\\.h$", "_test.cpp", "")
+  elseif expand("%") =~ "_test\\.go$"
+    let dest = substitute(expand("%"), "_test\\.go$", ".go", "")
+  elseif expand("%") =~ "\\.go$"
+    let dest = substitute(expand("%"), "\\.go$", "_test.go", "")
   endif
   if dest != ""
     execute "edit " . dest
@@ -299,7 +319,8 @@ nnoremap <leader>h :call SwitchToHeader()<cr>
 nnoremap <leader>H :call SwitchToTest()<cr>
 
 " re-map to jump to tag definition
-map <leader>g <c-]><cr>
+autocmd FileType * map <leader>g <c-]><cr>
+autocmd FileType go map <leader>g :GoDef<cr>
 
  " formatting shortcuts
 nmap <leader>f$ :call StripTrailingWhitespace()<CR>
@@ -308,6 +329,12 @@ vmap <leader>s :sort<cr>
 nnoremap <leader>w :w<cr>
 
 map <leader>ig :call AddHeaderGuard()<cr>
+
+vmap <leader>kf :FormatLines<cr>
+nmap <leader>kf :FormatCode<cr>
+
+map <leader>e :LspNextError<cr>
+map <leader>E :LspPreviousError<cr>
 
 " autocmd
 """""""""
@@ -333,6 +360,9 @@ if has_key(s:settings, 'colorscheme')
   exec 'colorscheme '.s:settings.colorscheme
 endif
 
+lua << EOF
+require("init")
+EOF
 
 " Credit:
 " * https://github.com/bling/dotvim
