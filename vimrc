@@ -6,6 +6,8 @@ let s:is_windows = has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_macvim = has('gui_macvim')
 
+set completeopt=menu
+
 " always use .vim
 if s:is_windows
   set runtimepath+=~/.vim
@@ -125,12 +127,17 @@ call plug#begin('~/.vim/plugged')
 " languages
 Plug 'sheerun/vim-polyglot'
 
+" special language support
+Plug 'sheerun/vim-go'
+
 " fuzzy file/tag searching
 Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
   let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h | %<(20,trunc)%an | %s"'
 
 " yank history
+"(disable excessive mappings)
+let g:yankring_enabled = 1
 Plug 'vim-scripts/YankRing.vim'
 
 " statusline and tabline
@@ -141,9 +148,26 @@ Plug 'vim-airline/vim-airline-themes'
 " commenting
 Plug 'scrooloose/nerdcommenter'
 
+let $CARGO_TARGET_DIR = 'target/analyze/'
+
 " auto complete!
-if has('nvim') || v:version >= 803
-  Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+if 0 && has('nvim')
+
+  " configured below after plug#end()
+  Plug 'neovim/nvim-lspconfig'
+
+elseif has('nvim') || v:version >= 803
+  " Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  "Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --rust-completer --go-completer' }
+  "  let g:ycm_always_populate_location_list = 1
+  "  let g:ycm_clangd_args = [
+  "    \ '--header-insertion=iwyu',
+   ""   \ '--suggest-missing-includes' \ ]
+
+  Plug 'dense-analysis/ale'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  let g:deoplete#enable_at_startup = 1
+
 else
   if has('lua')
     Plug 'Shougo/neocomplete.vim'
@@ -158,7 +182,7 @@ Plug 'rgarver/Kwbd.vim'
 " color schemes
 Plug 'nanotech/jellybeans.vim'
 " linting / syntax checking
-Plug 'rhysd/vim-clang-format'
+Plug 'google/vim-codefmt'
 " git
 Plug 'tpope/vim-fugitive'
 
@@ -173,6 +197,11 @@ Plug 'scrooloose/nerdtree', {'on':['NERDTreeToggle','NERDTreeFind']}
   let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
+Plug 'google/vim-maktaba'
+Plug 'bazelbuild/vim-bazel'
+
+Plug 'editorconfig/editorconfig-vim'
+
 " finish vim-plug
 call plug#end()
 
@@ -180,21 +209,72 @@ if s:first_install
   exec 'PlugInstall'
 endif
 
+if has('nvim')
+  lua << EOF
+local nvim_lsp = require('lspconfig')
+nvim_lsp.rust_analyzer.setup{}
+nvim_lsp.clangd.setup{}
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { 'clangd', 'rust_analyzer' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
+EOF
+endif
+
+
 " Shortcuts
 """""""""""""""""
 
 " formatting
-autocmd FileType c,cpp,proto nnoremap <buffer><Leader>cf :ClangFormat<CR>
-autocmd FileType c,cpp,proto vnoremap <buffer><Leader>cf :ClangFormat<CR>
-autocmd FileType rust nnoremap <buffer><Leader>cf :RustFmt<CR>
-autocmd FileType rust vnoremap <buffer><Leader>cf :RustFmt<CR>
+nnoremap <buffer><Leader>cf :FormatCode<CR>
+vnoremap <buffer><Leader>cf :FormatLines<CR>
+
+" compile
+" map <leader>b :YcmForceCompileAndDiagnostics<CR>
 
 " fuzzy-searching
-if isdirectory(".git")
-  map <leader>t :GFiles<cr>
-else
-  map <leader>t :Files<cr>
-endif
+map <leader>t :GFiles<cr>
 map <leader>T :Files<cr>
 map <leader>r :Tags<cr>
 map <leader>R :BTags<cr>
@@ -210,6 +290,38 @@ map <leader>q <Plug>Kwbd
 
 " tab completion
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+" completion
+" Use <c-space> to trigger completion.
+"inoremap <silent><expr> <c-space> coc#refresh()
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+"inoremap <silent><expr> <TAB>
+"      \ pumvisible() ? "\<C-n>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ coc#refresh()
+"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Use `[g` and `]g` to navigate diagnostics
+"nmap <silent> [g <Plug>(coc-diagnostic-prev)
+"nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+"nmap <silent> gd <Plug>(coc-definition)
+"nmap <silent> gy <Plug>(coc-type-definition)
+"nmap <silent> gi <Plug>(coc-implementation)
+"nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+"nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+"function! s:show_documentation()
+"  if (index(['vim','help'], &filetype) >= 0)
+"    execute 'h '.expand('<cword>')
+"  else
+"    call CocAction('doHover')
+"  endif
+"endfunction
 
 " Custom functions
 """"""""""""""""""
@@ -253,6 +365,10 @@ function! SwitchToTest()
     let dest = substitute(expand("%"), "\\.cpp$", "_test.cpp", "")
   elseif expand("%") =~ "\\.h$"
     let dest = substitute(expand("%"), "\\.h$", "_test.cpp", "")
+  elseif expand("%") =~ "_test\\.go$"
+    let dest = substitute(expand("%"), "_test\\.go$", ".go", "")
+  elseif expand("%") =~ "\\.go$"
+    let dest = substitute(expand("%"), "\\.go$", "_test.go", "")
   endif
   if dest != ""
     execute "edit " . dest
@@ -299,7 +415,8 @@ nnoremap <leader>h :call SwitchToHeader()<cr>
 nnoremap <leader>H :call SwitchToTest()<cr>
 
 " re-map to jump to tag definition
-map <leader>g <c-]><cr>
+autocmd FileType * map <leader>g <c-]><cr>
+autocmd FileType go map <leader>g :GoDef<cr>
 
  " formatting shortcuts
 nmap <leader>f$ :call StripTrailingWhitespace()<CR>
@@ -333,6 +450,13 @@ if has_key(s:settings, 'colorscheme')
   exec 'colorscheme '.s:settings.colorscheme
 endif
 
+
+" function! Iwyu()
+"  let file = expand("%")
+"  execute 'vnew | r !iwyu_tool -p out ' . file . ' -- -I/usr/lib/llvm-10/lib/clang/10.0.0/include'
+"endfunction()
+"
+"map <leader>i call Iwyu()<cr>
 
 " Credit:
 " * https://github.com/bling/dotvim
