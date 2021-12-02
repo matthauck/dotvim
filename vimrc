@@ -158,15 +158,16 @@ if 0 && has('nvim')
 
 elseif has('nvim') || v:version >= 803
   " Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  "Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --rust-completer --go-completer' }
-  "  let g:ycm_always_populate_location_list = 1
-  "  let g:ycm_clangd_args = [
-  "    \ '--header-insertion=iwyu',
-   ""   \ '--suggest-missing-includes' \ ]
+  Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --rust-completer --go-completer' }
+    let g:ycm_always_populate_location_list = 1
+    let g:ycm_clangd_args = [
+      \ '--header-insertion=iwyu',
+      \ '--suggest-missing-includes'
+      \ ]
 
-  Plug 'dense-analysis/ale'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  let g:deoplete#enable_at_startup = 1
+  "Plug 'dense-analysis/ale'
+  "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  "let g:deoplete#enable_at_startup = 1
 
 else
   if has('lua')
