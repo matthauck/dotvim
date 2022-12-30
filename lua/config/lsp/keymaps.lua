@@ -1,6 +1,5 @@
 local M = {}
 
-
 function M.setup_global()
   local opts = { noremap=true, silent=true }
   vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
@@ -28,13 +27,13 @@ function M.setup(bufnr)
   vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
   -- disabled: using trouble's
   -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+  -- disabled, using different plugin
+  -- vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 
-  vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>', bufopts)
+  vim.keymap.set('n', '<leader>x', '<cmd>TroubleToggle<cr>', bufopts)
   vim.keymap.set('n', 'gr', '<cmd>TroubleToggle lsp_references<cr>', bufopts)
 
-  vim.keymap.set('n', '<space>qf', do_quickfix, opts)
+  vim.keymap.set('n', '<leader>f', do_quickfix, opts)
 end
-
 
 return M
