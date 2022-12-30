@@ -130,11 +130,6 @@ Plug 'sheerun/vim-polyglot'
 " special language support
 Plug 'sheerun/vim-go'
 
-" fuzzy file/tag searching
-Plug '~/.fzf'
-Plug 'junegunn/fzf.vim'
-  let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h | %<(20,trunc)%an | %s"'
-
 " yank history
 "(disable excessive mappings)
 let g:yankring_enabled = 1
@@ -155,6 +150,10 @@ if has('nvim')
 
   Plug 'neovim/nvim-lspconfig'
 
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.*' }
+
   Plug 'folke/trouble.nvim'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'folke/lsp-colors.nvim'
@@ -170,11 +169,17 @@ if has('nvim')
   " Snippets source for nvim-cmp
   Plug 'saadparwaiz1/cmp_luasnip'
 
-elseif has('lua')
-  Plug 'Shougo/neocomplete.vim'
-    let g:neocomplete#enable_at_startup=1
-    let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
-    let g:neocomplete#sources#syntax#min_keyword_length = 3
+else
+  Plug '~/.fzf'
+  Plug 'junegunn/fzf.vim'
+    let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h | %<(20,trunc)%an | %s"'
+
+  if has('lua')
+    Plug 'Shougo/neocomplete.vim'
+      let g:neocomplete#enable_at_startup=1
+      let g:neocomplete#data_directory=s:get_cache_dir('neocomplete')
+      let g:neocomplete#sources#syntax#min_keyword_length = 3
+  endif
 endif
 
 " allows closing buffer w/o closing window!
@@ -216,10 +221,18 @@ nnoremap <buffer><Leader>cf :FormatCode<CR>
 vnoremap <buffer><Leader>cf :FormatLines<CR>
 
 " fuzzy-searching
-map <leader>t :GFiles<cr>
-map <leader>T :Files<cr>
-map <leader>r :Tags<cr>
-map <leader>R :BTags<cr>
+if has('nvim')
+  map <leader>t :Telescope git_files<cr>
+  map <leader>T :Telescope find_files<cr>
+  map <leader>r :Telescope lsp_dynamic_workspace_symbols<cr>
+  map <leader>R :Telescope lsp_document_symbols<cr>
+  map <leader>G :Telescope live_grep<cr>
+else
+  map <leader>t :GFiles<cr>
+  map <leader>T :Files<cr>
+  map <leader>r :Tags<cr>
+  map <leader>R :BTags<cr>
+endif
 
 " open dir tree
 nnoremap <leader>o :NERDTreeToggle<CR>
